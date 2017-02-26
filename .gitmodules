@@ -2,20 +2,20 @@
 	path = vendor/vim-pathogen
 	url = https://github.com/tpope/vim-pathogen.git
 [submodule "home/.vim/vim-atom-dark"]
-	path = home/.vim/vim-atom-dark
+	path = home/.vim/bundle/vim-atom-dark
 	url = https://github.com/gosukiwi/vim-atom-dark.git
 [submodule "home/.vim/nerdtree"]
-	path = home/.vim/nerdtree
+	path = home/.vim/bundle/nerdtree
 	url = https://github.com/scrooloose/nerdtree.git
 [submodule "home/.vim/vim-rails"]
-	path = home/.vim/vim-rails
+	path = home/.vim/bundle/vim-rails
 	url = https://github.com/tpope/vim-rails.git
 [submodule "home/.vim/nerdcommenter"]
-	path = home/.vim/nerdcommenter
+	path = home/.vim/bundle/nerdcommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
 [submodule "home/.vim/vim-airline"]
-	path = home/.vim/vim-airline
+	path = home/.vim/bundle/vim-airline
 	url = https://github.com/vim-airline/vim-airline.git
 [submodule "home/.vim/syntastic"]
-	path = home/.vim/syntastic
+	path = home/.vim/bundle/syntastic
 	url = https://github.com/vim-syntastic/syntastic.git
