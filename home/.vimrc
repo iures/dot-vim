@@ -5,7 +5,7 @@ call pathogen#infect()
   scriptencoding utf-8
 
   " I like pretty colors
-  colorscheme atom-dark
+  colorscheme atom-dark-256
   "colorscheme jellybeans
   "colorscheme ir_black
 
@@ -23,7 +23,7 @@ call pathogen#infect()
   set hlsearch
 
   " highlight the current line the cursor is on
-  set cursorline
+  "set cursorline
   " highlight the current column the cursor is on
   "set cursorcolumn
 
@@ -294,4 +294,59 @@ call pathogen#infect()
   nnoremap \| :vsplit<cr>
 
   " paste mode
-  set pastetoggle=<F1>
+  set pastetoggle=<F2>
+	nmap <silent> <F2> :set invpaste<CR>
+
+	" wrap
+	nmap <silent> <F3> :set invwrap<CR>
+
+	" highlight
+	map <Leader>/ :nohlsearch<cr>
+
+	
+	map <Home> :tprev<CR>
+	map <End>  :tnext<CR>
+     
+	map <PageDown> :lnext<CR>
+	map <PageUp>   :lprev<CR>
+
+
+  " Undo
+	set undolevels=10000
+	if has("persistent_undo")
+		set undodir=~/.vim/undo       " Allow undoes to persist even after a file is closed
+		set undofile
+	endif 
+'
+	vnoremap . :normal .<CR>
+	vnoremap @ :normal! @
+
+	"use ag"
+	nnoremap <Leader>a :Ag
+
+	"git"
+	map <silent> <Leader>gd :Gdiff<CR>
+	map <silent> <Leader>gb :Gblame<CR>
+	map <silent> <Leader>gg :Gbrowse<CR>
+
+	nmap <leader>gi :Gist
+	let g:gist_post_private = 1
+	let g:gist_open_browser_after_post = 1
+
+	
+	" Source custom vim from ~/.custom.vim
+	if filereadable(expand("~/.custom.vim"))
+		source ~/.vim.local
+	endif
+
+	" toggle syntastic error panel
+	function! ToggleErrorPanel()
+		let old_window_count = winnr('$')
+		lclose
+		if old_window_count == winnr('$')
+			" Nothing was closed, open syntastic error location panel
+			Errors
+		endif
+	endfunction
+
+	nnoremap <leader>er :call ToggleErrorPanel()<CR>
