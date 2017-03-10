@@ -2,34 +2,27 @@ call pathogen#infect()
 
 " Section: configuration
 
-  scriptencoding utf-8
-
-  " I like pretty colors
+  " scriptencoding utf-8
   colorscheme atom-dark-256
   "colorscheme jellybeans
   "colorscheme ir_black
-
+  
   " These two enable syntax highlighting
-  set nocompatible          " We're running Vim, not Vi!
-  syntax on                 " Enable syntax highlighting
+  set nocompatible " We're running Vim, not Vi!
+  syntax on " Enable syntax highlighting
 
   " Enable filetype-specific indenting and plugins
   filetype plugin indent on
-
+  
   " show the `best match so far' as search strings are typed
   set incsearch
 
   " Highlight search results once found:
   set hlsearch
 
-  " highlight the current line the cursor is on
-  "set cursorline
-  " highlight the current column the cursor is on
-  "set cursorcolumn
-
-  "sm:    flashes matching brackets or parentheses
+  "sm: flashes matching brackets or parentheses
   set showmatch
-
+  
   "sta:   helps with backspacing because of expandtab
   set smarttab
 
@@ -42,46 +35,19 @@ call pathogen#infect()
   " When scrolling off-screen do so 3 lines at a time, not 1
   set scrolloff=3
 
-  " enable line numbers 
-  set number
-  setlocal numberwidth=5
-
-  " Enable tab complete for commands.
+  " Enable tab complete for commands
   " first tab shows all matches. next tab starts cycling through the matches
   set wildmenu
   set wildmode=list:longest,full
-
-  " don't complete from included files, on account of slow
-  set complete-=i
-
-  " Display extra whitespace
-  "set list listchars=tab:»·,trail:·
-
-  " don't make it look like there are line breaks where there aren't:
-  "set nowrap
-
-  " assume the /g flag on :s substitutions to replace all matches in a line:
-  set gdefault
-
-  " Load matchit (% to bounce from do to end, etc.)
-  runtime! macros/matchit.vim
 
   " enable setting title
   set title
   " configure title to look like: Vim /path/to/file
   set titlestring=VIM:\ %-25.55F\ %a%r%m titlelen=70
 
-  " Make backspace work in insert mode
-  set backspace=indent,eol,start
-
-  " can has foldin plz?
-  set foldenable
-  set foldmethod=syntax
-  set foldlevel=999 " make it really high, so they're not displayed by default
-  
   " 'murica
   set spelllang=en_us
-  
+
   " ctrl-p ignores and whatnot
   set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
   "
@@ -172,12 +138,11 @@ call pathogen#infect()
   autocmd FileType php set omnifunc=phpcomplete#CompletePHP
   autocmd FileType c set omnifunc=ccomplete#Complete
 
-
   " have some fun with bufexplorer
   let g:bufExplorerDefaultHelp=0       " Do not show default help.
   let g:bufExplorerShowRelativePath=1  " Show relative paths.
 
-" IRB {{{
+  " IRB {{{
   autocmd FileType irb inoremap <buffer> <silent> <CR> <Esc>:<C-u>ruby v=VIM::Buffer.current;v.append(v.line_number, eval(v[v.line_number]).inspect)<CR>
 
 " Section: functions
@@ -214,6 +179,17 @@ call pathogen#infect()
     exec '!'.g:browser.' '.url
   endfunction
 
+  " Toggle syntastic error panel
+  function! ToggleErrorPanel()
+    let old_window_count = winnr('$')
+    lclose
+    if old_window_count == winnr('$')
+      " Nothing was closed, open syntastic error location panel
+      Errors
+    endif
+  endfunction
+
+
 " Section: commands
 
   " Shell
@@ -223,6 +199,7 @@ call pathogen#infect()
   command! -complete=file -nargs=+ Reek :Shell reek <q-args>
   command! -complete=file -nargs=+ Roodi :Shell roodi <q-args>
   command! -complete=file -nargs=+ Flog :Shell flog -m -I lib <q-args> 2>/dev/null
+
 
 " Section: mappings
 
@@ -295,58 +272,47 @@ call pathogen#infect()
 
   " paste mode
   set pastetoggle=<F2>
-	nmap <silent> <F2> :set invpaste<CR>
+  nmap <silent> <F2> :set invpaste<CR>
 
-	" wrap
-	nmap <silent> <F3> :set invwrap<CR>
+  " wrap
+  nmap <silent> <F3> :set invwrap<CR>
 
-	" highlight
-	map <Leader>/ :nohlsearch<cr>
+  " highlight
+  map <Leader>/ :nohlsearch<cr>
 
-	
-	map <Home> :tprev<CR>
-	map <End>  :tnext<CR>
+  
+  map <Home> :tprev<CR>
+  map <End>  :tnext<CR>
      
-	map <PageDown> :lnext<CR>
-	map <PageUp>   :lprev<CR>
-
+  map <PageDown> :lnext<CR>
+  map <PageUp>   :lprev<CR>
 
   " Undo
-	set undolevels=10000
-	if has("persistent_undo")
-		set undodir=~/.vim/undo       " Allow undoes to persist even after a file is closed
-		set undofile
-	endif 
-'
-	vnoremap . :normal .<CR>
-	vnoremap @ :normal! @
+  set undolevels=10000
+  if has("persistent_undo")
+    set undodir=~/.vim/undo       " Allow undoes to persist even after a file is closed
+    set undofile
+  endif 
 
-	"use ag"
-	nnoremap <Leader>a :Ag
+  vnoremap . :normal .<CR>
+  vnoremap @ :normal! @
 
-	"git"
-	map <silent> <Leader>gd :Gdiff<CR>
-	map <silent> <Leader>gb :Gblame<CR>
-	map <silent> <Leader>gg :Gbrowse<CR>
+  " Use ag"
+  nnoremap <Leader>a :Ag
 
-	nmap <leader>gi :Gist
-	let g:gist_post_private = 1
-	let g:gist_open_browser_after_post = 1
+  " Git"
+  map <silent> <Leader>gd :Gdiff<CR>
+  map <silent> <Leader>gb :Gblame<CR>
+  map <silent> <Leader>gg :Gbrowse<CR>
 
-	
-	" Source custom vim from ~/.custom.vim
-	if filereadable(expand("~/.custom.vim"))
-		source ~/.vim.local
-	endif
+  nmap <leader>gi :Gist
+  let g:gist_post_private = 1
+  let g:gist_open_browser_after_post = 1
 
-	" toggle syntastic error panel
-	function! ToggleErrorPanel()
-		let old_window_count = winnr('$')
-		lclose
-		if old_window_count == winnr('$')
-			" Nothing was closed, open syntastic error location panel
-			Errors
-		endif
-	endfunction
+  
+  " Source custom vim from ~/.custom.vim
+  if filereadable(expand("~/.custom.vim"))
+    source ~/.vim.local
+  endif
 
-	nnoremap <leader>er :call ToggleErrorPanel()<CR>
+  nnoremap <leader>er :call ToggleErrorPanel()<CR>
