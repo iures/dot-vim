@@ -2,8 +2,16 @@ call pathogen#infect()
 
 " Section: configuration
 
-  " scriptencoding utf-8
-  colorscheme atom-dark-256
+  scriptencoding utf-8
+
+  " Colorscheme
+  colorscheme gruvbox
+  set background=dark
+  let g:gruvbox_bold=1
+  let g:gruvbox_italic=1
+  let g:gruvbox_underline=1
+  let g:gruvbox_undercurl=1
+  "colorscheme atom-dark-256
   "colorscheme jellybeans
   "colorscheme ir_black
   "
@@ -21,7 +29,7 @@ call pathogen#infect()
   set hlsearch
 
   "sm: flashes matching brackets or parentheses
-  set showmatch
+  "set showmatch
 
   "sta:   helps with backspacing because of expandtab
   set smarttab
