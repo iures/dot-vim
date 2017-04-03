@@ -6,14 +6,14 @@ call pathogen#infect()
   colorscheme atom-dark-256
   "colorscheme jellybeans
   "colorscheme ir_black
-  
+  "
   " These two enable syntax highlighting
   set nocompatible " We're running Vim, not Vi!
   syntax on " Enable syntax highlighting
 
   " Enable filetype-specific indenting and plugins
   filetype plugin indent on
-  
+
   " show the `best match so far' as search strings are typed
   set incsearch
 
@@ -22,7 +22,7 @@ call pathogen#infect()
 
   "sm: flashes matching brackets or parentheses
   set showmatch
-  
+
   "sta:   helps with backspacing because of expandtab
   set smarttab
 
@@ -106,16 +106,16 @@ call pathogen#infect()
     autocmd FileType cucumber set autoindent tabstop=2 shiftwidth=2 softtabstop=2 expandtab
     autocmd FileType puppet set autoindent tabstop=2 shiftwidth=2 softtabstop=2 expandtab
     au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
-    au BufRead,BufNewFile *etc/nginx/* set ft=nginx 
+    au BufRead,BufNewFile *etc/nginx/* set ft=nginx
     " treat rackup files like ruby
     au BufRead,BufNewFile *.ru set ft=ruby
     au BufRead,BufNewFile Gemfile set ft=ruby
     autocmd BufEnter *.haml setlocal cursorcolumn
-    au BufRead,BufNewFile Gemfile set ft=ruby                                   
-    au BufRead,BufNewFile Capfile set ft=ruby                                   
-    au BufRead,BufNewFile Thorfile set ft=ruby                                   
-    au BufRead,BufNewFile *.god set ft=ruby  
-    au BufRead,BufNewFile .caprc set ft=ruby  
+    au BufRead,BufNewFile Gemfile set ft=ruby
+    au BufRead,BufNewFile Capfile set ft=ruby
+    au BufRead,BufNewFile Thorfile set ft=ruby
+    au BufRead,BufNewFile *.god set ft=ruby
+    au BufRead,BufNewFile .caprc set ft=ruby
     au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
   augroup END
 
@@ -251,7 +251,6 @@ call pathogen#infect()
   " Easily spell check
   " http://vimcasts.org/episodes/spell-checking/
   nmap <silent> <leader>s :set spell!<CR>
-  
 
   map <C-c>n :cnext<CR>
   map <C-c>p :cprevious<CR>
@@ -280,19 +279,19 @@ call pathogen#infect()
   " highlight
   map <Leader>/ :nohlsearch<cr>
 
-  
   map <Home> :tprev<CR>
   map <End>  :tnext<CR>
-     
+
   map <PageDown> :lnext<CR>
   map <PageUp>   :lprev<CR>
 
   " Undo
   set undolevels=10000
+  " Allow undoes to persist even after a file is closed
   if has("persistent_undo")
-    set undodir=~/.vim/undo       " Allow undoes to persist even after a file is closed
+    set undodir=~/.vim/undo 
     set undofile
-  endif 
+  endif
 
   vnoremap . :normal .<CR>
   vnoremap @ :normal! @
@@ -309,10 +308,10 @@ call pathogen#infect()
   let g:gist_post_private = 1
   let g:gist_open_browser_after_post = 1
 
-  
   " Source custom vim from ~/.custom.vim
-  if filereadable(expand("~/.custom.vim"))
-    source ~/.vim.local
+  if filereadable(expand("~/.vimrc.local"))
+    source ~/.vimrc.local
   endif
 
+  " Error panel
   nnoremap <leader>er :call ToggleErrorPanel()<CR>
