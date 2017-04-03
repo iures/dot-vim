@@ -28,3 +28,39 @@
 [submodule "home/.vim/bundle/supertab"]
 	path = home/.vim/bundle/supertab
 	url = git@github.com:ervandew/supertab.git
+[submodule "home/.vim/bundle/vim-endwise"]
+	path = home/.vim/bundle/vim-endwise
+	url = git@github.com:tpope/vim-endwise.git
+[submodule "home/.vim/bundle/tabular"]
+	path = home/.vim/bundle/tabular
+	url = git@github.com:godlygeek/tabular.git
+[submodule "home/.vim/bundle/ag.vim"]
+	path = home/.vim/bundle/ag.vim
+	url = git@github.com:rking/ag.vim.git
+[submodule "home/.vim/bundle/matchit"]
+	path = home/.vim/bundle/matchit
+	url = git@github.com:tmhedberg/matchit.git
+[submodule "home/.vim/bundle/vim-surround"]
+	path = home/.vim/bundle/vim-surround
+	url = git@github.com:tpope/vim-surround.git
+[submodule "home/.vim/bundle/YankRing.vim"]
+	path = home/.vim/bundle/YankRing.vim
+	url = git@github.com:vim-scripts/YankRing.vim.git
+[submodule "home/.vim/bundle/gundo.vim"]
+	path = home/.vim/bundle/gundo.vim
+	url = git@github.com:sjl/gundo.vim.git
+[submodule "home/.vim/bundle/vim-textobj-user"]
+	path = home/.vim/bundle/vim-textobj-user
+	url = git@github.com:kana/vim-textobj-user.git
+[submodule "home/.vim/bundle/gist-vim"]
+	path = home/.vim/bundle/gist-vim
+	url = git@github.com:mattn/gist-vim.git
+[submodule "home/.vim/bundle/vim-cucumber"]
+	path = home/.vim/bundle/vim-cucumber
+	url = git@github.com:tpope/vim-cucumber.git
+[submodule "home/.vim/bundle/gruvbox"]
+	path = home/.vim/bundle/gruvbox
+	url = git@github.com:morhetz/gruvbox.git
+[submodule "home/.vim/bundle/vim-unimpaired"]
+	path = home/.vim/bundle/vim-unimpaired
+	url = git@github.com:tpope/vim-unimpaired.git
