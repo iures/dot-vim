@@ -37,6 +37,9 @@ call pathogen#infect()
   " Change <Leader>
   let mapleader = ","
 
+  " Change <Space>
+  noremap <space> :
+
   " Set temporary directory (don't litter local dir with swp/tmp files)
   set directory=/tmp/
 
@@ -82,7 +85,7 @@ call pathogen#infect()
   let NERDTreeHighlightCursorline = 1
   let NERDTreeShowHidden = 1
   " map enter to activating a node
-  let NERDTreeMapActivateNode='<CR>'
+  let NERDTreeMapActivateNode='o'
   let NERDTreeIgnore=['\.git','\.DS_Store','\.pdf', '.beam']
 
   nnoremap <C-g> :NERDTreeToggle<cr>
