@@ -1,4 +1,50 @@
-call pathogen#infect()
+call plug#begin('~/.vim/plugged')
+
+Plug 'scrooloose/nerdtree'
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'jesseleite/vim-agriculture'
+
+Plug 'gosukiwi/vim-atom-dark'
+Plug 'scrooloose/nerdtree'
+
+Plug 'scrooloose/nerdcommenter'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-syntastic/syntastic'
+
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'ervandew/supertab'
+Plug 'tpope/vim-endwise'
+Plug 'godlygeek/tabular'
+Plug 'tmhedberg/matchit'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/YankRing.vim'
+Plug 'sjl/gundo.vim'
+Plug 'kana/vim-textobj-user'
+Plug 'mattn/gist-vim'
+Plug 'tpope/vim-cucumber'
+Plug 'morhetz/gruvbox'
+Plug 'tpope/vim-unimpaired'
+Plug 'romainl/vim-qf'
+
+Plug 'vim-ruby/vim-ruby'
+Plug 'nelstrom/vim-textobj-rubyblock'
+Plug 'tpope/vim-rails'
+Plug 'Shougo/neocomplete.vim'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'chrisbra/NrrwRgn'
+"Plug 'rlue/vim-fold-rspec'
+
+
+"Plug 'rking/ag.vim'
+"Plug 'kien/ctrlp.vim'
+
+
+call plug#end()
+
 
 " Section: configuration
 
@@ -25,11 +71,16 @@ call pathogen#infect()
   " show the `best match so far' as search strings are typed
   set incsearch
 
+  " set no wrap
+  set nowrap
+
   " Highlight search results once found:
   set hlsearch
+  " Show line numbers
+  set number
 
   "sm: flashes matching brackets or parentheses
-  "set showmatch
+  set showmatch
 
   "sta:   helps with backspacing because of expandtab
   set smarttab
@@ -58,22 +109,6 @@ call pathogen#infect()
 
   " 'murica
   set spelllang=en_us
-
-  " ctrl-p ignores and whatnot
-  set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-  "
-  let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn|tmp|bundle)$', 
-  \ 'file': '\v\.(exe|so|dll|gem)$',
-  \ }
-
-  " ctrl-p extensions
-  "
-  let g:ctrlp_extensions = ['tag']
-  " keybindings
-  "
-  let g:ctrlp_map = '<Leader>.'
-  map <Leader>, :CtrlPMRU<CR>
 
   " Turn off rails bits of statusbar
   let g:rails_statusline=0
@@ -105,6 +140,9 @@ call pathogen#infect()
 
   " use the_silver_surfer for Ack
   let g:ackprg = 'ag --nogroup --nocolor --column'
+
+  " Folding
+  let g:fold_rspec_foldenable = 0
 
   augroup myfiletypes
     " Clear old autocmds in group
@@ -225,6 +263,10 @@ call pathogen#infect()
 
   " insert hashrocket, =>, with control-l
   imap <C-l> <Space>=><Space>
+  
+  " remap ESC keys to jj and kk
+  imap jj <ESC>
+  imap kk <ESC>
 
   " align hashrockets with <leader>t control-l
   vmap <leader>t<C-l> :Align =><CR>
@@ -232,26 +274,24 @@ call pathogen#infect()
   " Toggle NERDTree with <leader>d
   map <silent> <leader>d :execute 'NERDTreeToggle ' . getcwd()<CR>
 
-  " TextMate fuzzy finder with <leader>t
-  map <silent> <leader>t :CtrlP<CR>
-
-  " <leader>F to begin searching with ack
-  map <leader>F :Ack<space>
-
   " search next/previous -- center in page
   nmap n nzz
   nmap N Nzz
   nmap * *Nzz
   nmap # #nzz
 
+  " Copies the current file path to the clipboard
+  :nnoremap <Leader>c :let @+=expand('%:p')<CR>
+
+
   " Yank from the cursor to the end of the line, to be consistent with C and D.
   nnoremap Y y$
 
   " Hide search highlighting
-  map <silent> <leader>nh :nohls <CR>
+  map <silent> <leader>' :nohls <CR>
 
   " toggle Quickfix window with <leader>q
-  map <silent> <leader>q :QFix<CR>
+  noremap <silent> <leader>q <Plug>QfCtoggle
 
   nnoremap <leader>irb :<C-u>below new<CR>:setfiletype irb<CR>:set syntax=ruby<CR>:set buftype=nofile<CR>:set bufhidden=delete<CR>i
 
@@ -261,7 +301,7 @@ call pathogen#infect()
 
   " Easily spell check
   " http://vimcasts.org/episodes/spell-checking/
-  nmap <silent> <leader>s :set spell!<CR>
+  "nmap <silent> <leader>s :set spell!<CR>
 
   map <C-c>n :cnext<CR>
   map <C-c>p :cprevious<CR>
@@ -298,6 +338,7 @@ call pathogen#infect()
 
   " Undo
   set undolevels=10000
+
   " Allow undoes to persist even after a file is closed
   if has("persistent_undo")
     set undodir=~/.vim/undo 
@@ -307,13 +348,12 @@ call pathogen#infect()
   vnoremap . :normal .<CR>
   vnoremap @ :normal! @
 
-  " Use ag"
-  nnoremap <Leader>a :Ag
-
-  " Git"
+  " Git
   map <silent> <Leader>gd :Gdiff<CR>
   map <silent> <Leader>gb :Gblame<CR>
   map <silent> <Leader>gg :Gbrowse<CR>
+  nnoremap gdh :diffget //2<CR>
+  nnoremap gdl :diffget //3<CR>
 
   nmap <leader>gi :Gist
   let g:gist_post_private = 1
@@ -324,5 +364,152 @@ call pathogen#infect()
     source ~/.vimrc.local
   endif
 
+  " Accessibility
+  nnoremap * m`:keepjumps normal! *<cr>``
+
   " Error panel
   nnoremap <leader>er :call ToggleErrorPanel()<CR>
+
+  " Rails
+  nmap <Leader>b obyebug<ESC>
+
+  let g:airline#extensions#tabline#enabled = 1
+
+  " FZF
+  nnoremap <leader><leader> :Buffers<CR>
+  nnoremap <silent><leader>. :Files<CR>
+  nnoremap <leader><CR> :GFiles<CR>
+  nnoremap <leader>fi :Files<CR>
+  nnoremap <leader>C :Colors<CR>
+  nnoremap <leader>fl :BLines<CR>
+  nnoremap <leader>ft :BTags<CR>
+  nnoremap <leader>ag :Ag! <C-R><C-W><CR>
+  nnoremap <leader>m :History<CR>
+
+  " RG
+  nmap <Leader>/ <Plug>RgRawSearch
+  vmap <Leader>/ <Plug>RgRawVisualSelection
+  nmap <Leader>* <Plug>RgRawWordUnderCursor
+
+  " Specs
+  nnoremap <leader>s. :Dtl<CR><CR>
+  nnoremap <leader>st :Dts<CR><CR>
+  nnoremap <leader>sf :Dtf<CR><CR>
+  nnoremap <leader>sa :Dta<CR><CR>
+
+  nnoremap <A-.> :call MoveToNextTab()<CR>
+  nnoremap <A-,> :call MoveToPrevTab()<CR>
+
+	" Plugin: qf
+	nmap <F5>   <Plug>QfSwitch
+	nmap <F6>   <Plug>QfCtoggle
+	nmap <F7>   <Plug>QfCprevious
+	nmap <F8>   <Plug>QfCnext
+	nmap <C-F6> <Plug>QfLtoggle
+	nmap <C-F7> <Plug>QfLprevious
+	nmap <C-F8> <Plug>QfLnext
+
+  " Folding
+  nmap <leader>zr zfir
+
+" Functions
+
+  " FZF
+	function! s:build_quickfix_list(lines)
+		call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+		copen
+		cc
+	endfunction
+
+	let g:fzf_action = {
+		\ 'ctrl-q': function('s:build_quickfix_list'),
+		\ 'ctrl-t': 'tab split',
+		\ 'ctrl-x': 'split',
+		\ 'ctrl-v': 'vsplit' }
+
+	let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
+
+	" Customize fzf colors to match your color scheme
+	" - fzf#wrap translates this to a set of `--color` options
+	let g:fzf_colors =
+	\ { 'fg':      ['fg', 'Normal'],
+		\ 'bg':      ['bg', 'Normal'],
+		\ 'hl':      ['fg', 'Comment'],
+		\ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+		\ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+		\ 'hl+':     ['fg', 'Statement'],
+		\ 'info':    ['fg', 'PreProc'],
+		\ 'border':  ['fg', 'Ignore'],
+		\ 'prompt':  ['fg', 'Conditional'],
+		\ 'pointer': ['fg', 'Exception'],
+		\ 'marker':  ['fg', 'Keyword'],
+		\ 'spinner': ['fg', 'Label'],
+		\ 'header':  ['fg', 'Comment'] }
+
+  command! -bang -nargs=* Rg
+    \ call fzf#vim#grep(
+    \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+    \   fzf#vim#with_preview(), <bang>0)
+
+  function! RipgrepFzf(query, fullscreen)
+    let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+    let initial_command = printf(command_fmt, shellescape(a:query))
+    let reload_command = printf(command_fmt, '{q}')
+    let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+  endfunction
+
+  command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+  command! Dts exe "!tmux send -t 1 'dts " . expand("%") . ":" . line(".") . "' Enter"
+  command! Dtf exe "!tmux send -t 1 'dts " . expand("%") "' Enter"
+  command! Dta exe "!tmux send -t 1 'dtss' Enter"
+  command! Dtl exe "!tmux send -t 1 '!!' Enter"
+
+
+  function MoveToPrevTab()
+    "there is only one window
+    if tabpagenr('$') == 1 && winnr('$') == 1
+      return
+    endif
+    "preparing new window
+    let l:tab_nr = tabpagenr('$')
+    let l:cur_buf = bufnr('%')
+    if tabpagenr() != 1
+      close!
+      if l:tab_nr == tabpagenr('$')
+        tabprev
+      endif
+      sp
+    else
+      close!
+      exe "0tabnew"
+    endif
+    "opening current buffer in new window
+    exe "b".l:cur_buf
+  endfunc
+
+  function MoveToNextTab()
+    "there is only one window
+    if tabpagenr('$') == 1 && winnr('$') == 1
+      return
+    endif
+    "preparing new window
+    let l:tab_nr = tabpagenr('$')
+    let l:cur_buf = bufnr('%')
+    if tabpagenr() < tab_nr
+      close!
+      if l:tab_nr == tabpagenr('$')
+        tabnext
+      endif
+      sp
+    else
+      close!
+      tabnew
+    endif
+    "opening current buffer in new window
+    exe "b".l:cur_buf
+  endfunc
+
+runtime macros/matchit.vim
+let g:fzf_layout = { 'window': 'enew' }
