@@ -11,10 +11,9 @@ Plug 'scrooloose/nerdtree'
 
 Plug 'scrooloose/nerdcommenter'
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-syntastic/syntastic'
 
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
 Plug 'ervandew/supertab'
 Plug 'tpope/vim-endwise'
 Plug 'godlygeek/tabular'
@@ -26,16 +25,35 @@ Plug 'kana/vim-textobj-user'
 Plug 'mattn/gist-vim'
 Plug 'tpope/vim-cucumber'
 Plug 'morhetz/gruvbox'
+Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-unimpaired'
 Plug 'romainl/vim-qf'
 
+"Git
+
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+
 Plug 'vim-ruby/vim-ruby'
-Plug 'nelstrom/vim-textobj-rubyblock'
+Plug 'rhysd/vim-textobj-ruby'
+"Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'tpope/vim-rails'
+
+Plug 'dsawardekar/portkey'
+Plug 'dsawardekar/ember.vim'
+Plug 'joukevandermaas/vim-ember-hbs'
+Plug 'andrewradev/ember_tools.vim'
+
 Plug 'Shougo/neocomplete.vim'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'terryma/vim-multiple-cursors'
+"Plug 'terryma/vim-multiple-cursors'
 Plug 'chrisbra/NrrwRgn'
+Plug 'jpalardy/vim-slime'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'junegunn/vim-peekaboo'
+Plug 'justinmk/vim-gtfo'
+
 "Plug 'rlue/vim-fold-rspec'
 
 
@@ -51,12 +69,17 @@ call plug#end()
   scriptencoding utf-8
 
   " Colorscheme
-  colorscheme gruvbox
+  "colorscheme gruvbox
+  "set background=dark
+  "let g:gruvbox_bold=1
+  "let g:gruvbox_italic=1
+  "let g:gruvbox_underline=1
+  "let g:gruvbox_undercurl=1
+  
+  syntax enable
   set background=dark
-  let g:gruvbox_bold=1
-  let g:gruvbox_italic=1
-  let g:gruvbox_underline=1
-  let g:gruvbox_undercurl=1
+  colorscheme solarized
+
   "colorscheme atom-dark-256
   "colorscheme jellybeans
   "colorscheme ir_black
@@ -110,6 +133,8 @@ call plug#end()
   " 'murica
   set spelllang=en_us
 
+  :set t_Co=16
+
   " Turn off rails bits of statusbar
   let g:rails_statusline=0
 
@@ -144,13 +169,16 @@ call plug#end()
   " Folding
   let g:fold_rspec_foldenable = 0
 
+  let g:slime_paste_file = "$HOME/.slime_paste"
+  let g:slime_target = "tmux"
+
   augroup myfiletypes
     " Clear old autocmds in group
     autocmd!
     " autoindent with two spaces, always expand tabs
     autocmd FileType ruby,eruby,yaml set autoindent shiftwidth=2 softtabstop=2 tabstop=2 expandtab
     autocmd FileType python set autoindent shiftwidth=4 softtabstop=4 expandtab
-    autocmd FileType javascript,html,htmldjango,css set autoindent shiftwidth=2 softtabstop=2 expandtab
+    autocmd FileType javascript,html,hbs,htmldjango,css set autoindent shiftwidth=2 softtabstop=2 expandtab
     autocmd FileType vim set autoindent tabstop=2 shiftwidth=2 softtabstop=2 expandtab
     autocmd FileType cucumber set autoindent tabstop=2 shiftwidth=2 softtabstop=2 expandtab
     autocmd FileType puppet set autoindent tabstop=2 shiftwidth=2 softtabstop=2 expandtab
@@ -281,7 +309,11 @@ call plug#end()
   nmap # #nzz
 
   " Copies the current file path to the clipboard
-  :nnoremap <Leader>c :let @+=expand('%:p')<CR>
+  :nnoremap <Leader>cp :let @+=expand('%:p')<CR>
+  :nnoremap <Leader>cl :let @+=expand('%') . ':' . line('.')<CR>
+
+  vnoremap <C-C> "+y
+  vnoremap <C-Insert> "+y
 
 
   " Yank from the cursor to the end of the line, to be consistent with C and D.
@@ -319,6 +351,16 @@ call plug#end()
 
   nnoremap _ :split<cr>
   nnoremap \| :vsplit<cr>
+
+
+  noremap \= :Tab /=<CR>
+  noremap \: :Tab /^[^:]*:\zs/l0l1<CR>
+  noremap \> :Tab /=><CR>
+  noremap \, :Tab /,\zs/l0l1<CR>
+  noremap \{ :Tab /{<CR>
+  noremap \\| :Tab /\|<CR>
+  noremap \& :Tab /\(&\\|\\\\\)<CR>
+
 
   " paste mode
   set pastetoggle=<F2>
@@ -374,6 +416,8 @@ call plug#end()
   nmap <Leader>b obyebug<ESC>
 
   let g:airline#extensions#tabline#enabled = 1
+  let g:airline_theme='solarized'
+  let g:airline_solarized_bg='dark'
 
   " FZF
   nnoremap <leader><leader> :Buffers<CR>
@@ -381,7 +425,8 @@ call plug#end()
   nnoremap <leader><CR> :GFiles<CR>
   nnoremap <leader>fi :Files<CR>
   nnoremap <leader>C :Colors<CR>
-  nnoremap <leader>fl :BLines<CR>
+  nnoremap <leader>fl :CustomBLines<CR>
+
   nnoremap <leader>ft :BTags<CR>
   nnoremap <leader>ag :Ag! <C-R><C-W><CR>
   nnoremap <leader>m :History<CR>
@@ -394,11 +439,13 @@ call plug#end()
   " Specs
   nnoremap <leader>s. :Dtl<CR><CR>
   nnoremap <leader>st :Dts<CR><CR>
+  nnoremap <leader>sd :Dtd<CR><CR>
   nnoremap <leader>sf :Dtf<CR><CR>
+  nnoremap <leader>sl :CustomBLinesInSpec<CR>
   nnoremap <leader>sa :Dta<CR><CR>
 
-  nnoremap <A-.> :call MoveToNextTab()<CR>
-  nnoremap <A-,> :call MoveToPrevTab()<CR>
+  nnoremap <A>. :call MoveToNextTab()<CR>
+  nnoremap <A>, :call MoveToPrevTab()<CR>
 
 	" Plugin: qf
 	nmap <F5>   <Plug>QfSwitch
@@ -408,6 +455,8 @@ call plug#end()
 	nmap <C-F6> <Plug>QfLtoggle
 	nmap <C-F7> <Plug>QfLprevious
 	nmap <C-F8> <Plug>QfLnext
+
+  nnoremap <leader>fq :SearchCurrentQFList<CR>
 
   " Folding
   nmap <leader>zr zfir
@@ -431,28 +480,79 @@ call plug#end()
 
 	" Customize fzf colors to match your color scheme
 	" - fzf#wrap translates this to a set of `--color` options
-	let g:fzf_colors =
-	\ { 'fg':      ['fg', 'Normal'],
-		\ 'bg':      ['bg', 'Normal'],
-		\ 'hl':      ['fg', 'Comment'],
-		\ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-		\ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-		\ 'hl+':     ['fg', 'Statement'],
-		\ 'info':    ['fg', 'PreProc'],
-		\ 'border':  ['fg', 'Ignore'],
-		\ 'prompt':  ['fg', 'Conditional'],
-		\ 'pointer': ['fg', 'Exception'],
-		\ 'marker':  ['fg', 'Keyword'],
-		\ 'spinner': ['fg', 'Label'],
-		\ 'header':  ['fg', 'Comment'] }
+  "let g:fzf_colors =
+  "\ { 'fg':      ['fg', 'Normal'],
+    "\ 'bg':      ['bg', 'Normal'],
+    "\ 'hl':      ['fg', 'Comment'],
+    "\ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+    "\ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+    "\ 'hl+':     ['fg', 'Statement'],
+    "\ 'info':    ['fg', 'PreProc'],
+    "\ 'border':  ['fg', 'Ignore'],
+    "\ 'prompt':  ['fg', 'Conditional'],
+    "\ 'pointer': ['fg', 'Exception'],
+    "\ 'marker':  ['fg', 'Keyword'],
+    "\ 'spinner': ['fg', 'Label'],
+    "\ 'header':  ['fg', 'Comment'] }
+
+  let g:fzf_colors =
+  \ { 'fg+':     ['fg', 'Normal'],
+    \ 'bg+':     ['bg', 'Normal'],
+    \ 'hl+':     ['fg', 'Comment'],
+    \ 'fg':      ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+    \ 'bg':      ['bg', 'CursorLine', 'CursorColumn'],
+    \ 'hl':      ['fg', 'Statement'],
+    \ 'info':    ['fg', 'PreProc'],
+    \ 'border':  ['fg', 'Ignore'],
+    \ 'prompt':  ['fg', 'Conditional'],
+    \ 'pointer': ['fg', 'Exception'],
+    \ 'marker':  ['fg', 'Keyword'],
+    \ 'spinner': ['fg', 'Label'],
+    \ 'header':  ['fg', 'Comment'] }
 
   command! -bang -nargs=* Rg
     \ call fzf#vim#grep(
     \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
     \   fzf#vim#with_preview(), <bang>0)
 
+
+  command! -bang -nargs=* CustomBLines call fzf#vim#buffer_lines(<q-args>, {'options': ['--no-sort']}, <bang>0)
+
+  "command! -bang -nargs=* CustomBLinesInSpec call fzf#vim#buffer_lines(<q-args>, {'options': ['--no-sort', '--query "''describe | ''context"']}, <bang>0)
+  "command! -bang -nargs=* CustomBLinesInSpec
+    "\ call fzf#vim#grep(
+    "\   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+    "\   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort --preview "bat -p --color always {}" --query "''describe | ''context"'}, 'right:60%', '?'),
+    "\   1)
+
+  command! -bang -nargs=* CustomBLinesInSpec
+    \ call fzf#vim#grep(
+    \   'rg  --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+    \   fzf#vim#with_preview({'options': '--no-sort --query "''describe | ''context | ''it"'}, '', '?'),
+    \   1)
+
+    "\   fzf#vim#with_preview({'options': ["--delimiter", ":", "--nth", "4..", "--no-sort", "--preview", "bat", "-p", "--color", "always", "{}", "--query", "'describe | 'context"]}, 'right:60%', '?'),
+
+  "command! -bang -nargs=* CustomBLines
+    "\ call fzf#vim#grep(
+    "\   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%:p')), 1)
+    "\   fzf#vim#with_preview({'options': '--keep-right --no-sort --delimiter : --nth 4.. --preview "bat -p --color always {}"'}, 'right:60%' ))
+
+
+  command! -bang -nargs=* SearchCurrentQFList
+    \ call fzf#vim#grep(
+    \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.join(map(getqflist(), "bufname(v:val['bufnr'])")), 1,
+    \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}, 'up:50%', '?'),
+    \   1)
+
+  command! -bang -nargs=* LinesWithPreview
+    \ call fzf#vim#grep(
+    \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+    \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort --preview "bat -p --color always {}"'}, 'right:60%', '?'),
+    \   1)
+
   function! RipgrepFzf(query, fullscreen)
-    let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+    let command_fmt = 'rg --column --line-number --no-heading --no-sort --color=always --smart-case %s || true'
     let initial_command = printf(command_fmt, shellescape(a:query))
     let reload_command = printf(command_fmt, '{q}')
     let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
@@ -461,11 +561,45 @@ call plug#end()
 
   command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
-  command! Dts exe "!tmux send -t 1 'dts " . expand("%") . ":" . line(".") . "' Enter"
-  command! Dtf exe "!tmux send -t 1 'dts " . expand("%") "' Enter"
-  command! Dta exe "!tmux send -t 1 'dtss' Enter"
-  command! Dtl exe "!tmux send -t 1 '!!' Enter"
+  "command! Dts exe "!tmux send -t 1 q C-u 'rspec --color --tty " . expand("%") . ":" . line(".") . " | less -r' Enter Enter"
+  "command! Dtd exe "!tmux send -t 1 q C-u 'rspec --color --tty " . expand("%") . ":" . line(".") . "' Enter Enter"
+  "command! Dtf exe "!tmux send -t 1 q C-u 'rspec --color --tty " . expand("%") " | less -r' Enter"
+  "command! Dta exe "!tmux send -t 1 q C-u 'rspec --color --tty | less -r' Enter"
+  "command! Dtl exe "!tmux send -t 1 q C-u '!!' Enter"
 
+  command! Dts exe "!tmux send -t 1 q C-u 'rspec --color --tty " . expand("%") . ":" . line(".") . "' Enter Enter"
+  command! Dtd exe "!tmux send -t 1 q C-u 'rspec --color --tty " . expand("%") . ":" . line(".") . "' Enter Enter"
+  command! Dtf exe "!tmux send -t 1 q C-u 'rspec --color --tty " . expand("%") "' Enter"
+  command! Dta exe "!tmux send -t 1 q C-u 'rspec --color --tty' Enter"
+  command! Dtl exe "!tmux send -t 1 q C-u '!!' Enter"
+
+  function! Send_to_tmux(visual, count) range abort
+			if (a:visual)
+					execute "normal! gv\"zy"
+			else
+					execute "normal! \"zyip"
+			endif
+			let text = @z
+			let text = substitute(text, ';', '\\;', 'g')
+			let text = substitute(text, '"', '\\"', 'g')
+			let text = substitute(text, '\n', '" Enter "', 'g')
+			let text = substitute(text, '!', '\\!', 'g')
+			let text = substitute(text, '%', '\\%', 'g')
+			let text = substitute(text, '#', '\\#', 'g')
+			silent execute "!tmux send-keys -t " . a:count . " -- \"" . text . "\""
+			silent execute "!tmux send-keys -t " . a:count . " Enter"
+			execute "redraw!"
+	endfunction
+	nnoremap <Leader>p :<C-u>call Send_to_tmux(0, v:count1)<CR>
+	xnoremap <Leader>p :<C-u>call Send_to_tmux(1, v:count1)<CR>
+
+	nnoremap <Leader>f :%SlimeSend<CR>
+	xnoremap <Leader>f :%SlimeSend<CR>
+
+  "vim-visual-multi
+  let g:VM_maps = {}
+  let g:VM_maps["Undo"] = 'u'
+  let g:VM_maps["Redo"] = '<C-r>'
 
   function MoveToPrevTab()
     "there is only one window
@@ -510,6 +644,24 @@ call plug#end()
     "opening current buffer in new window
     exe "b".l:cur_buf
   endfunc
+
+  function! s:list_buffers()
+		redir => list
+		silent ls
+		redir END
+		return split(list, "\n")
+	endfunction
+
+	function! s:delete_buffers(lines)
+		execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
+	endfunction
+
+	command! BD call fzf#run(fzf#wrap({
+		\ 'source': s:list_buffers(),
+		\ 'sink*': { lines -> s:delete_buffers(lines) },
+		\ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
+	\ }))
+
 
 runtime macros/matchit.vim
 let g:fzf_layout = { 'window': 'enew' }
